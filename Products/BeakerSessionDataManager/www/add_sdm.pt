@@ -1,0 +1,30 @@
+<h1 tal:replace="structure context/manage_page_header">HEADER</h1>
+<h1 tal:replace="structure context/manage_tabs">TABS</h1>
+
+<h3> Add A Beaker Session Data Container </h3>
+
+<form action="addBeakerSessionDataManager">
+ <table border="0">
+
+   <tr>
+     <td class="form-label">Id</td>
+     <td>
+       <input type="text" name="id" value="session_data_manager" />
+     </td>
+   </tr>
+
+   <tr>
+     <td class="form-label">Title</td>
+     <td>
+       <input type="text" name="title" value="Beaker Session Data Manager" />
+     </td>
+   </tr>
+
+   <tr>
+     <td>&nbsp;</td>
+     <td><input type="submit" value=" Add " /></td>
+   </tr>
+
+</form>
+
+<h1 tal:replace="structure context/manage_page_footer">FOOTER</h1>
