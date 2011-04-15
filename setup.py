@@ -26,6 +26,7 @@ setup(name='Products.BeakerSessionDataManager',
           'collective.beaker',
           'Zope2',
           'zope.interface',
+          'unittest2',
           # -*- Extra requirements: -*-
       ],
       )

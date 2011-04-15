@@ -1,4 +1,4 @@
-from UserDict import UserDict
+from UserDict import IterableUserDict as UserDict
 from zope.interface import implements
 
 from AccessControl.SecurityInfo import ClassSecurityInfo

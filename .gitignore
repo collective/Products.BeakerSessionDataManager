@@ -1,2 +1,7 @@
+*~
 *.pyc
 *.egg-info
+bin
+coverage
+develop-eggs
+.installed.cfg
