@@ -25,20 +25,6 @@ class ISessionDataObject(IMapping):
         called.
         """
 
-    def getLastModified():
-        """
-        Return the time the transient object was last modified in
-        integer seconds-since-the-epoch form.  Modification generally implies
-        a call to one of the transient object's __setitem__ or __delitem__
-        methods, directly or indirectly as a result of a call to
-        update, clear, or other mutating data access methods.
-        """
-
-    def setLastModified():
-        """
-        Cause the last modified time to be set to now.
-        """
-
     def getCreated():
         """
         Return the time the transient object was created in integer

@@ -1,3 +1,4 @@
+from datetime import datetime
 import unittest2 as unittest
 from zope.component import provideAdapter
 import zope.component.testing
@@ -86,7 +87,53 @@ class TestBeakerSessionDataObject(unittest.TestCase):
         from Products.BeakerSessionDataManager.sessiondata import BeakerSessionDataObject
         return BeakerSessionDataObject
     
+    def _makeOne(self):
+        from collective.beaker.testing import TestSession
+        return self._getTargetClass()(TestSession())
+    
     def test_interface(self):
         from zope.interface.verify import verifyClass
         from Products.BeakerSessionDataManager.interfaces import ISessionDataObject
         verifyClass(ISessionDataObject, self._getTargetClass())
+
+    def test_session_mutator(self):
+        from collective.beaker.testing import TestSession
+        from Products.BeakerSessionDataManager.sessiondata import session_mutator
+        class Dummy(object):
+            data = TestSession()
+            
+            @session_mutator
+            def mutate(self):
+                pass
+        
+        dummy = Dummy()
+        dummy.mutate()
+        self.assertTrue(dummy.data._saved)
+
+    def test_getId(self):
+        ob = self._makeOne()
+        self.assertEqual('test-session', ob.getId())
+
+    def test_invalidate(self):
+        ob = self._makeOne()
+        ob.invalidate()
+        self.assertTrue(ob.session._invalidated)
+    
+    def test_isValid(self):
+        ob = self._makeOne()
+        self.assertTrue(ob.isValid())
+
+    def test_getCreated(self):
+        ob = self._makeOne()
+        ob.session = {'_creation_time': datetime.now()}
+        self.assertTrue(isinstance(ob.getCreated(), float))
+
+    def test_getContainerKey(self):
+        ob = self._makeOne()
+        self.assertEqual('test-session', ob.getContainerKey())
+    
+    def test__p_changed(self):
+        ob = self._makeOne()
+        ob._p_changed = 1
+        self.assertTrue(ob.session._saved)
+        self.assertEqual(1, ob._p_changed)

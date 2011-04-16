@@ -1,4 +1,6 @@
+import time
 from UserDict import IterableUserDict as UserDict
+
 from zope.interface import implements
 
 from AccessControl.SecurityInfo import ClassSecurityInfo
@@ -116,7 +118,7 @@ def addBeakerSessionDataManager(dispatcher, id, title='', REQUEST=None):
     sdc = BeakerSessionDataManager(title=title)
     sdc._setId(id)
     dispatcher._setObject(id, sdc)
-    if REQUEST is not None:
+    if REQUEST is not None: # pragma: no cover
         REQUEST['RESPONSE'].redirect('%s/manage_workspace'
                                      % dispatcher.absolute_url())
 
@@ -174,14 +176,8 @@ class BeakerSessionDataObject(UserDict, Implicit):
     def isValid(self):
         return True
 
-    def getLastModified(self):
-        return self.session.last_accessed
-
-    def setLastModified(self):
-        self.session.save(accessed_only=True)
-
     def getCreated(self):
-        return self.session['_creation_time']
+        return time.mktime(self.session['_creation_time'].timetuple())
 
     getContainerKey = getId
 
