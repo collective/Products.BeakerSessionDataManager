@@ -58,6 +58,27 @@ class TestBeakerSessionDataManager(unittest.TestCase):
         from Products.Sessions.SessionDataManager import SessionDataManagerErr
         self.assertRaises(SessionDataManagerErr, sdm.getBrowserIdManager)
 
+    def test_factory(self):
+        from Products.BeakerSessionDataManager.sessiondata import BeakerSessionDataManager
+        from Products.BeakerSessionDataManager.sessiondata import addBeakerSessionDataManager
+        class DummyDispatcher(object):
+            def _setObject(self, id, ob):
+                setattr(self, id, ob)
+        dispatcher = DummyDispatcher()
+        addBeakerSessionDataManager(dispatcher, 'sdm')
+        self.assertTrue(isinstance(dispatcher.sdm, BeakerSessionDataManager))
+
+    def test_manage_afterAdd(self):
+        sdm = self._makeOne()
+        sdm.manage_afterAdd(None, None)
+        self.assertTrue(sdm._hasTraversalHook)
+
+    def test_manage_beforeDelete(self):
+        sdm = self._makeOne()
+        sdm.manage_afterAdd(None, None)
+        sdm.manage_beforeDelete(None, None)
+        self.assertFalse(hasattr(sdm, '_hasTraversalHook'))
+
 
 class TestBeakerSessionDataObject(unittest.TestCase):
     
