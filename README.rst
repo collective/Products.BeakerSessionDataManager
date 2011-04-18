@@ -16,7 +16,8 @@ reasons:
 .. Note::
    If you are developing a product that needs sessions but are not already
    using Zope sessions, you should probably just use collective.beaker
-   directly.
+   directly. This product is meant for use with existing add-ons that already
+   use Zope sessions (i.e. request.SESSION).
 
 .. _`Beaker`: http://beaker.groovie.org/
 .. _`collective.beaker`: http://pypi.python.org/pypi/collective.beaker
