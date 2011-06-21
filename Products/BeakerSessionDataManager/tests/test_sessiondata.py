@@ -137,3 +137,12 @@ class TestBeakerSessionDataObject(unittest.TestCase):
         ob._p_changed = 1
         self.assertTrue(ob.session._saved)
         self.assertEqual(1, ob._p_changed)
+
+    def test_existence_real_collective_beaker_session(self):
+        # Collective.Beaker fakes a session with a Dict which implements
+        # __len__. Beaker session uses a lazy interable dict but doesn't
+        # implement __len__. A simple truth test fails without __len__.
+        from collective.beaker.session import SessionObject
+        from Products.BeakerSessionDataManager.sessiondata import BeakerSessionDataObject
+        session = BeakerSessionDataObject(SessionObject({}))
+        self.assertTrue(session)
