@@ -1,11 +1,14 @@
 Changelog
 =========
 
+1.0 (2011-06-29)
+----------------
 
-- Add test and fix for missing __len__
-  [kuetrz]
+- Add test and fix for missing __len__.
+  [kuetrzi]
 
 1.0b1 (2011-04-17)
 ------------------
 
-- Initial release
+- Initial release.
+  [davisagli]

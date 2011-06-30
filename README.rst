@@ -55,3 +55,10 @@ Notes
 
 * Beaker does not automatically clean up old sessions, so you may want to set
   up a cron job to take care of this.
+
+Contributors
+============
+
+David Glick [davisagli]
+Paul Roe [kuetrzi]
+
