@@ -163,6 +163,12 @@ class BeakerSessionDataObject(UserDict, Implicit):
     __guarded_delitem__ = __delitem__
     delete = __delitem__
 
+    def __len__(self):
+        try:
+            return self.data.__len__()
+        except AttributeError:
+            return len(self.data.keys())
+
     #
     # ISessionDataObject
     #

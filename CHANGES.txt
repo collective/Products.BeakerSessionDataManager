@@ -1,6 +1,10 @@
 Changelog
 =========
 
+
+- Add test and fix for missing __len__
+  [kuetrz]
+
 1.0b1 (2011-04-17)
 ------------------
 
