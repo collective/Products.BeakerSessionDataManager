@@ -12,7 +12,6 @@ from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from ZPublisher.BeforeTraverse import registerBeforeTraverse
 from ZPublisher.BeforeTraverse import unregisterBeforeTraverse
 
-from Products.Sessions.interfaces import ISessionDataManager
 from Products.Sessions.SessionPermissions import ACCESS_CONTENTS_PERM
 from Products.Sessions.SessionPermissions import ACCESS_SESSIONDATA_PERM
 from Products.Sessions.SessionPermissions import ARBITRARY_SESSIONDATA_PERM
@@ -26,7 +25,13 @@ from collective.beaker.interfaces import ISession
 class BeakerSessionDataManager(SimpleItem, PropertyManager):
     """ Implement a session data manager which uses Beaker sessions.
     """
-    implements(ISessionDataManager)
+    try:
+        from Products.Sessions.interfaces import ISessionDataManager
+        implements(ISessionDataManager)
+    except ImportError:
+        from Products.Sessions.SessionInterfaces import SessionDataManagerInterface
+        __implements__ = (SessionDataManagerInterface,)
+
     security = ClassSecurityInfo()
 
     ok = {'meta_type':1, 'id':1, 'title': 1, 'icon':1,

@@ -1,6 +1,18 @@
 from setuptools import setup, find_packages
+import sys
 
 version = '1.1dev'
+
+requires = [
+    'setuptools',
+    'collective.beaker',
+    'Zope2',
+    'zope.interface',
+    'unittest2',
+    ]
+
+if sys.version_info < (2,6):
+    requires.append('ZPublisherEventsBackport')
 
 setup(name='Products.BeakerSessionDataManager',
       version=version,
@@ -21,12 +33,5 @@ setup(name='Products.BeakerSessionDataManager',
       namespace_packages=['Products'],
       include_package_data=True,
       zip_safe=False,
-      install_requires=[
-          'setuptools',
-          'collective.beaker',
-          'Zope2',
-          'zope.interface',
-          'unittest2',
-          # -*- Extra requirements: -*-
-      ],
+      install_requires=requires,
       )

@@ -4,6 +4,9 @@ Changelog
 1.1 (unreleased)
 ----------------
 
+- Made compatible with Zope 2.10.
+  [davisagli]
+
 1.0 (2011-06-29)
 ----------------
 
