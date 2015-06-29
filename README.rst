@@ -1,6 +1,15 @@
 Introduction
 ============
 
+.. image:: http://img.shields.io/pypi/v/Products.BeakerSessionDataManager.svg
+    :target: https://pypi.python.org/pypi/Products.BeakerSessionDataManager
+
+.. image:: https://img.shields.io/travis/davisagli/Products.BeakerSessionDataManager/master.svg
+    :target: http://travis-ci.org/davisagli/Products.BeakerSessionDataManager
+
+.. image:: https://img.shields.io/coveralls/davisagli/Products.BeakerSessionDataManager/master.svg
+    :target: https://coveralls.io/r/davisagli/Products.BeakerSessionDataManager
+
 ``Products.BeakerSessionDataManager`` is a replacement for the default Zope 2
 session implementation.  It uses `Beaker`_ as a backend (via `collective.beaker`_)
 and adapts the Beaker session to provide the same interface as a normal Zope
