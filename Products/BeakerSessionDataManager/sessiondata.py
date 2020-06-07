@@ -1,7 +1,7 @@
 import time
-from UserDict import IterableUserDict as UserDict
+from six.moves import UserDict
 
-from zope.interface import implements
+from zope.interface import implementer
 
 from AccessControl.SecurityInfo import ClassSecurityInfo
 from Acquisition import Implicit
@@ -12,6 +12,7 @@ from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from ZPublisher.BeforeTraverse import registerBeforeTraverse
 from ZPublisher.BeforeTraverse import unregisterBeforeTraverse
 
+from Products.Sessions.interfaces import ISessionDataManager
 from Products.Sessions.SessionPermissions import ACCESS_CONTENTS_PERM
 from Products.Sessions.SessionPermissions import ACCESS_SESSIONDATA_PERM
 from Products.Sessions.SessionPermissions import ARBITRARY_SESSIONDATA_PERM
@@ -22,15 +23,10 @@ from Products.BeakerSessionDataManager.interfaces import ISessionDataObject
 from collective.beaker.interfaces import ISession
 
 
+@implementer(ISessionDataManager)
 class BeakerSessionDataManager(SimpleItem, PropertyManager):
     """ Implement a session data manager which uses Beaker sessions.
     """
-    try:
-        from Products.Sessions.interfaces import ISessionDataManager
-        implements(ISessionDataManager)
-    except ImportError:
-        from Products.Sessions.SessionInterfaces import SessionDataManagerInterface
-        __implements__ = (SessionDataManagerInterface,)
 
     security = ClassSecurityInfo()
 
@@ -140,10 +136,10 @@ def session_mutator(func):
     return mutating_func
 
 
-class BeakerSessionDataObject(UserDict, Implicit):
+@implementer(ISessionDataObject)
+class BeakerSessionDataObject(Implicit):
     """ Adapts a beaker session object to the interface expected of Zope sessions.
     """
-    implements(ISessionDataObject)
 
     security = ClassSecurityInfo()
     security.setDefaultAccess('allow')
