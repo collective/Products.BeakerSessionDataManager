@@ -1,7 +1,13 @@
 Changelog
 =========
 
-1.1 (unreleased)
+2.0 (unreleased)
+----------------
+
+- Nothing changed yet.
+
+
+1.1 (2011-12-05)
 ----------------
 
 - Made compatible with Zope 2.10.
