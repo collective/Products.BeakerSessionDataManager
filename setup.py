@@ -22,8 +22,11 @@ setup(name='Products.BeakerSessionDataManager',
       # Get more strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
         "Programming Language :: Python",
-        "Framework :: Zope2",
-        ],
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Framework :: Zope :: 4",
+        "License :: OSI Approved :: MIT License",
+       ],
       keywords='zope sessions beaker',
       author='David Glick, Groundwire',
       author_email='davidglick@groundwire.org',
