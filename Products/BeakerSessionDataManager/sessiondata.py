@@ -1,10 +1,9 @@
 import time
-from UserDict import IterableUserDict as UserDict
+from collections import UserDict
 
-from zope.interface import implements
+from zope.interface import implementer
 
 from AccessControl.SecurityInfo import ClassSecurityInfo
-from Acquisition import Implicit
 from App.class_init import InitializeClass
 from OFS.SimpleItem import SimpleItem
 from OFS.PropertyManager import PropertyManager
@@ -17,25 +16,20 @@ from Products.Sessions.SessionPermissions import ACCESS_SESSIONDATA_PERM
 from Products.Sessions.SessionPermissions import ARBITRARY_SESSIONDATA_PERM
 from Products.Sessions.SessionDataManager import SessionDataManagerErr
 from Products.Sessions.SessionDataManager import SessionDataManagerTraverser
+from Products.Sessions.interfaces import ISessionDataManager
 
 from Products.BeakerSessionDataManager.interfaces import ISessionDataObject
 from collective.beaker.interfaces import ISession
 
 
+@implementer(ISessionDataManager)
 class BeakerSessionDataManager(SimpleItem, PropertyManager):
     """ Implement a session data manager which uses Beaker sessions.
     """
-    try:
-        from Products.Sessions.interfaces import ISessionDataManager
-        implements(ISessionDataManager)
-    except ImportError:
-        from Products.Sessions.SessionInterfaces import SessionDataManagerInterface
-        __implements__ = (SessionDataManagerInterface,)
-
     security = ClassSecurityInfo()
 
-    ok = {'meta_type':1, 'id':1, 'title': 1, 'icon':1,
-          'bobobase_modification_time':1, 'title_or_id':1 }
+    ok = {'meta_type': 1, 'id': 1, 'title': 1, 'icon': 1,
+          'bobobase_modification_time': 1, 'title_or_id': 1}
     security.setDefaultAccess(ok)
 
     def __init__(self, title=''):
@@ -48,13 +42,12 @@ class BeakerSessionDataManager(SimpleItem, PropertyManager):
     meta_type = 'Beaker Session Data Manager'
     _requestSessionName = 'SESSION'
 
-    _properties=(
-        {'id':'title', 'type':'string', 'mode':'w', 'label':'Title'},
+    _properties = (
+        {'id': 'title', 'type': 'string', 'mode': 'w', 'label': 'Title'},
         )
 
-    manage_options = (PropertyManager.manage_options
-                    + SimpleItem.manage_options
-                     )
+    manage_options = (
+        PropertyManager.manage_options + SimpleItem.manage_options)
 
     def _session(self):
         """ Here's the core logic which looks up the Beaker session. """
@@ -64,24 +57,29 @@ class BeakerSessionDataManager(SimpleItem, PropertyManager):
     #
     #   ISessionDataManager implementation
     #
-    
+
     security.declareProtected(ACCESS_SESSIONDATA_PERM, 'getSessionData')
+
     def getSessionData(self, create=1):
         """ """
         return self._session()
-    
+
     security.declareProtected(ACCESS_SESSIONDATA_PERM, 'hasSessionData')
+
     def hasSessionData(self):
         """ """
         return True
 
-    security.declareProtected(ARBITRARY_SESSIONDATA_PERM,'getSessionDataByKey')
+    security.declareProtected(
+        ARBITRARY_SESSIONDATA_PERM, 'getSessionDataByKey')
+
     def getSessionDataByKey(self, key):
         raise SessionDataManagerErr(
-            'Beaker session data manager does not support retrieving arbitrary sessions.'
+                'Beaker session data manager does not support retrieving arbitrary sessions.'  # noqa: E501
             )
 
     security.declareProtected(ACCESS_CONTENTS_PERM, 'getBrowserIdManager')
+
     def getBrowserIdManager(self):
         """ """
         raise SessionDataManagerErr(
@@ -103,16 +101,18 @@ class BeakerSessionDataManager(SimpleItem, PropertyManager):
         # work though.
         parent = self.aq_inner.aq_parent
 
-        if getattr(self,'_hasTraversalHook', None):
+        if getattr(self, '_hasTraversalHook', None):
             unregisterBeforeTraverse(parent, 'BeakerSessionDataManager')
             del self._hasTraversalHook
             self._requestSessionName = None
 
         if requestSessionName:
             hook = SessionDataManagerTraverser(requestSessionName, self.id)
-            registerBeforeTraverse(parent, hook, 'BeakerSessionDataManager', 50)
+            registerBeforeTraverse(
+                parent, hook, 'BeakerSessionDataManager', 50)
             self._hasTraversalHook = 1
             self._requestSessionName = requestSessionName
+
 
 InitializeClass(BeakerSessionDataManager)
 
@@ -123,12 +123,12 @@ def addBeakerSessionDataManager(dispatcher, id, title='', REQUEST=None):
     sdc = BeakerSessionDataManager(title=title)
     sdc._setId(id)
     dispatcher._setObject(id, sdc)
-    if REQUEST is not None: # pragma: no cover
+    if REQUEST is not None:  # pragma: no cover
         REQUEST['RESPONSE'].redirect('%s/manage_workspace'
                                      % dispatcher.absolute_url())
 
-addBeakerSessionDataManagerForm = PageTemplateFile('www/add_sdm.pt',
-                                                     globals())
+
+addBeakerSessionDataManagerForm = PageTemplateFile('www/add_sdm.pt', globals())
 
 
 def session_mutator(func):
@@ -140,11 +140,11 @@ def session_mutator(func):
     return mutating_func
 
 
-class BeakerSessionDataObject(UserDict, Implicit):
-    """ Adapts a beaker session object to the interface expected of Zope sessions.
+@implementer(ISessionDataObject)
+class BeakerSessionDataObject(UserDict):
+    """ Adapts a beaker session object to the interface
+    expected of Zope sessions.
     """
-    implements(ISessionDataObject)
-
     security = ClassSecurityInfo()
     security.setDefaultAccess('allow')
     security.declareObjectPublic()
@@ -194,13 +194,15 @@ class BeakerSessionDataObject(UserDict, Implicit):
 
     #
     # compatibility with standard persistent Zope sessions
-    # 
+    #
 
     def _get_p_changed(self):
         return 1
+
     def _set_p_changed(self, v):
         if v:
             self.session.save()
     _p_changed = property(_get_p_changed, _set_p_changed)
+
 
 InitializeClass(BeakerSessionDataObject)
