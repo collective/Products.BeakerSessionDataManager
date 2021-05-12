@@ -1,5 +1,4 @@
 from setuptools import setup, find_packages
-import sys
 
 version = "1.1dev"
 
@@ -10,9 +9,6 @@ requires = [
     "zope.interface",
     "unittest2",
 ]
-
-if sys.version_info < (2, 6):
-    requires.append("ZPublisherEventsBackport")
 
 setup(
     name="Products.BeakerSessionDataManager",
@@ -37,4 +33,9 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=requires,
+    extras_require={
+        "test": [
+            "Products.Sessions",
+        ],
+    },
 )
