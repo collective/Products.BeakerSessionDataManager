@@ -70,5 +70,3 @@ Contributors
 
 * David Glick [davisagli]
 * Paul Roe [kuetrzi]
-
-.. include:: CHANGES.rst
