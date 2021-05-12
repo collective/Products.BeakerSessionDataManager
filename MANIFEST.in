@@ -1,0 +1,7 @@
+graft Products
+include *.rst
+include *.txt
+include *.cfg
+global-exclude *.pyc
+exclude requirements.txt
+exclude .coveragerc
