@@ -4,6 +4,7 @@ from zope.interface.common.mapping import IMapping
 class ISessionDataObject(IMapping):
     """ Supports a mapping interface plus expiration- and container-related
     methods """
+
     def getId():
         """
         Returns a meaningful unique id for the object.  Note that this id
@@ -36,13 +37,13 @@ class ISessionDataObject(IMapping):
         Return the key under which the object was placed in its
         container.
         """
-        
+
     def set(k, v):
         """ Alias for __setitem__ """
 
     def __guarded_setitem__(k, v):
         """ Alias for __setitem__ """
-        
+
     def delete(k):
         """ Alias for __delitem__ """
 

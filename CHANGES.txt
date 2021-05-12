@@ -1,7 +1,14 @@
 Changelog
 =========
 
-1.1 (unreleased)
+2.0 (unreleased)
+----------------
+
+- Python 3 compatibility and drop Python 2.6 compability
+  [mpeeters]
+
+
+1.1 (2011-12-05)
 ----------------
 
 - Made compatible with Zope 2.10.
