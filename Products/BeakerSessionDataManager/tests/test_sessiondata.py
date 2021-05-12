@@ -113,10 +113,9 @@ class TestBeakerSessionDataObject(unittest.TestCase):
         return self._getTargetClass()(TestSession())
 
     def test_interface(self):
-        from zope.interface.verify import verifyClass
         from Products.BeakerSessionDataManager.interfaces import ISessionDataObject
 
-        verifyClass(ISessionDataObject, self._getTargetClass())
+        self.assertTrue(ISessionDataObject.implementedBy(self._getTargetClass()))
 
     def test_session_mutator(self):
         from collective.beaker.testing import TestSession
