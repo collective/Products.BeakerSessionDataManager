@@ -1,29 +1,30 @@
-from six.moves import UserDict
-from zope.interface import implementer
+# -*- coding: utf-8 -*-
+
 from AccessControl.SecurityInfo import ClassSecurityInfo
 from Acquisition import Implicit
 from App.class_init import InitializeClass
-from OFS.SimpleItem import SimpleItem
 from OFS.PropertyManager import PropertyManager
+from OFS.SimpleItem import SimpleItem
+from Products.BeakerSessionDataManager.interfaces import ISessionDataObject
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-from ZPublisher.BeforeTraverse import registerBeforeTraverse
-from ZPublisher.BeforeTraverse import unregisterBeforeTraverse
-from Products.Sessions.interfaces import ISessionDataManager
+from Products.Sessions.SessionDataManager import SessionDataManagerErr
+from Products.Sessions.SessionDataManager import SessionDataManagerTraverser
 from Products.Sessions.SessionPermissions import ACCESS_CONTENTS_PERM
 from Products.Sessions.SessionPermissions import ACCESS_SESSIONDATA_PERM
 from Products.Sessions.SessionPermissions import ARBITRARY_SESSIONDATA_PERM
-from Products.Sessions.SessionDataManager import SessionDataManagerErr
-from Products.Sessions.SessionDataManager import SessionDataManagerTraverser
-from Products.BeakerSessionDataManager.interfaces import ISessionDataObject
+from Products.Sessions.interfaces import ISessionDataManager
+from ZPublisher.BeforeTraverse import registerBeforeTraverse
+from ZPublisher.BeforeTraverse import unregisterBeforeTraverse
 from collective.beaker.interfaces import ISession
+from six.moves import UserDict
+from zope.interface import implementer
 
 import time
 
 
 @implementer(ISessionDataManager)
 class BeakerSessionDataManager(SimpleItem, PropertyManager):
-    """ Implement a session data manager which uses Beaker sessions.
-    """
+    """Implement a session data manager which uses Beaker sessions."""
 
     security = ClassSecurityInfo()
 
@@ -52,7 +53,7 @@ class BeakerSessionDataManager(SimpleItem, PropertyManager):
     manage_options = PropertyManager.manage_options + SimpleItem.manage_options
 
     def _session(self):
-        """ Here's the core logic which looks up the Beaker session. """
+        """Here's the core logic which looks up the Beaker session."""
         session = ISession(self.REQUEST)
         return BeakerSessionDataObject(session)
 
@@ -90,11 +91,11 @@ class BeakerSessionDataManager(SimpleItem, PropertyManager):
     # Traversal hook
 
     def manage_afterAdd(self, item, container):
-        """ Add our traversal hook """
+        """Add our traversal hook"""
         self.updateTraversalData(self._requestSessionName)
 
     def manage_beforeDelete(self, item, container):
-        """ Clean up on delete """
+        """Clean up on delete"""
         self.updateTraversalData(None)
 
     def updateTraversalData(self, requestSessionName=None):
@@ -118,8 +119,7 @@ InitializeClass(BeakerSessionDataManager)
 
 
 def addBeakerSessionDataManager(dispatcher, id, title="", REQUEST=None):
-    """ Add a BSDM to dispatcher.
-    """
+    """Add a BSDM to dispatcher."""
     sdc = BeakerSessionDataManager(title=title)
     sdc._setId(id)
     dispatcher._setObject(id, sdc)
@@ -131,7 +131,7 @@ addBeakerSessionDataManagerForm = PageTemplateFile("www/add_sdm.pt", globals())
 
 
 def session_mutator(func):
-    """ Decorator to make a UserDict mutator save the session. """
+    """Decorator to make a UserDict mutator save the session."""
 
     def mutating_func(self, *args, **kw):
         res = func(self, *args, **kw)
@@ -143,8 +143,7 @@ def session_mutator(func):
 
 @implementer(ISessionDataObject)
 class BeakerSessionDataObject(Implicit):
-    """ Adapts a beaker session object to the interface expected of Zope sessions.
-    """
+    """Adapts a beaker session object to the interface expected of Zope sessions."""
 
     security = ClassSecurityInfo()
     security.setDefaultAccess("allow")

@@ -1,9 +1,11 @@
+# -*- coding: utf-8 -*-
+
 from zope.interface.common.mapping import IMapping
 
 
 class ISessionDataObject(IMapping):
-    """ Supports a mapping interface plus expiration- and container-related
-    methods """
+    """Supports a mapping interface plus expiration- and container-related
+    methods"""
 
     def getId():
         """
@@ -39,13 +41,13 @@ class ISessionDataObject(IMapping):
         """
 
     def set(k, v):
-        """ Alias for __setitem__ """
+        """Alias for __setitem__"""
 
     def __guarded_setitem__(k, v):
-        """ Alias for __setitem__ """
+        """Alias for __setitem__"""
 
     def delete(k):
-        """ Alias for __delitem__ """
+        """Alias for __delitem__"""
 
     def __guarded_delitem__(k):
-        """ Alias for __delitem__ """
+        """Alias for __delitem__"""

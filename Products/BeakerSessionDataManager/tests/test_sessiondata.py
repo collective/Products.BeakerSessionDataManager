@@ -1,13 +1,16 @@
+# -*- coding: utf-8 -*-
+
 from datetime import datetime
-import unittest2 as unittest
 from zope.component import provideAdapter
+
+import unittest2 as unittest
 import zope.component.testing
 
 
 class TestBeakerSessionDataManager(unittest.TestCase):
     def setUp(self):
-        from collective.beaker.testing import TestSession
         from collective.beaker.interfaces import ISession
+        from collective.beaker.testing import TestSession
         from zope.publisher.interfaces import IRequest
 
         def testingSession(request):
@@ -34,8 +37,8 @@ class TestBeakerSessionDataManager(unittest.TestCase):
         return makerequest(sdm)
 
     def test_interface(self):
-        from zope.interface.verify import verifyClass
         from Products.Sessions.interfaces import ISessionDataManager
+        from zope.interface.verify import verifyClass
 
         verifyClass(ISessionDataManager, self._getTargetClass())
 
@@ -73,10 +76,10 @@ class TestBeakerSessionDataManager(unittest.TestCase):
 
     def test_factory(self):
         from Products.BeakerSessionDataManager.sessiondata import (
-            BeakerSessionDataManager,
+            addBeakerSessionDataManager,
         )
         from Products.BeakerSessionDataManager.sessiondata import (
-            addBeakerSessionDataManager,
+            BeakerSessionDataManager,
         )
 
         class DummyDispatcher(object):
@@ -118,8 +121,8 @@ class TestBeakerSessionDataObject(unittest.TestCase):
         self.assertTrue(ISessionDataObject.implementedBy(self._getTargetClass()))
 
     def test_session_mutator(self):
-        from collective.beaker.testing import TestSession
         from Products.BeakerSessionDataManager.sessiondata import session_mutator
+        from collective.beaker.testing import TestSession
 
         class Dummy(object):
             data = TestSession()
@@ -164,10 +167,10 @@ class TestBeakerSessionDataObject(unittest.TestCase):
         # Collective.Beaker fakes a session with a Dict which implements
         # __len__. Beaker session uses a lazy interable dict but doesn't
         # implement __len__. A simple truth test fails without __len__.
-        from collective.beaker.session import SessionObject
         from Products.BeakerSessionDataManager.sessiondata import (
             BeakerSessionDataObject,
         )
+        from collective.beaker.session import SessionObject
 
         session = BeakerSessionDataObject(SessionObject({}))
         self.assertTrue(session)
