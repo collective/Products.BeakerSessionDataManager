@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0 (unreleased)
+2.0 (2021-05-12)
 ----------------
 
 - Python 3 compatibility and drop Python 2.6 compability
