@@ -4,7 +4,8 @@ Changelog
 2.1 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Add dict API methods on `BeakerSessionDataObject` for plone addons compatibility
+  [mpeeters]
 
 
 2.0 (2021-05-12)
