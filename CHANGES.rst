@@ -4,7 +4,8 @@ Changelog
 2.2 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Add compatibility with Products.Sessions 4.11 and better.
+  [pgrunewald]
 
 
 2.1 (2021-05-12)

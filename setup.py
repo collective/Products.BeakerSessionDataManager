@@ -8,6 +8,7 @@ requires = [
     "Zope2",
     "zope.interface",
     "unittest2",
+    "Products.Sessions",
 ]
 
 setup(
@@ -33,9 +34,5 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=requires,
-    extras_require={
-        "test": [
-            "Products.Sessions",
-        ],
-    },
+    extras_require={},
 )
