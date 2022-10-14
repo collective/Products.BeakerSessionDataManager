@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from AccessControl.SecurityInfo import ClassSecurityInfo
+from AccessControl.Permissions import access_contents_information
 from Acquisition import Implicit
 from App.class_init import InitializeClass
 from OFS.PropertyManager import PropertyManager
@@ -9,9 +10,6 @@ from Products.BeakerSessionDataManager.interfaces import ISessionDataObject
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from Products.Sessions.SessionDataManager import SessionDataManagerErr
 from Products.Sessions.SessionDataManager import SessionDataManagerTraverser
-from Products.Sessions.SessionPermissions import ACCESS_CONTENTS_PERM
-from Products.Sessions.SessionPermissions import ACCESS_SESSIONDATA_PERM
-from Products.Sessions.SessionPermissions import ARBITRARY_SESSIONDATA_PERM
 from Products.Sessions.interfaces import ISessionDataManager
 from ZPublisher.BeforeTraverse import registerBeforeTraverse
 from ZPublisher.BeforeTraverse import unregisterBeforeTraverse
@@ -20,6 +18,19 @@ from six.moves import UserDict
 from zope.interface import implementer
 
 import time
+
+try:
+    # Products.Session 4.11+
+    from Products.Sessions.permissions import access_session_data
+    access_arbitrary_user_session_data = access_session_data
+except ImportError:
+    # Products.Session 4.10-
+    from Products.Sessions.SessionPermissions import (
+        ACCESS_SESSIONDATA_PERM as access_session_data,
+    )
+    from Products.Sessions.SessionPermissions import (
+        ARBITRARY_SESSIONDATA_PERM as access_arbitrary_user_session_data,
+    )
 
 
 @implementer(ISessionDataManager)
@@ -61,26 +72,26 @@ class BeakerSessionDataManager(SimpleItem, PropertyManager):
     #   ISessionDataManager implementation
     #
 
-    security.declareProtected(ACCESS_SESSIONDATA_PERM, "getSessionData")
+    security.declareProtected(access_session_data, "getSessionData")
 
     def getSessionData(self, create=1):
         """ """
         return self._session()
 
-    security.declareProtected(ACCESS_SESSIONDATA_PERM, "hasSessionData")
+    security.declareProtected(access_session_data, "hasSessionData")
 
     def hasSessionData(self):
         """ """
         return True
 
-    security.declareProtected(ARBITRARY_SESSIONDATA_PERM, "getSessionDataByKey")
+    security.declareProtected(access_arbitrary_user_session_data, "getSessionDataByKey")
 
     def getSessionDataByKey(self, key):
         raise SessionDataManagerErr(
             "Beaker session data manager does not support retrieving arbitrary sessions."
         )
 
-    security.declareProtected(ACCESS_CONTENTS_PERM, "getBrowserIdManager")
+    security.declareProtected(access_contents_information, "getBrowserIdManager")
 
     def getBrowserIdManager(self):
         """ """
