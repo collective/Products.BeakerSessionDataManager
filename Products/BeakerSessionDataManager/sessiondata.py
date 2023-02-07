@@ -144,6 +144,9 @@ addBeakerSessionDataManagerForm = PageTemplateFile("www/add_sdm.pt", globals())
 def session_mutator(func):
     """Decorator to make a UserDict mutator save the session."""
 
+    # Python 2.7 compatibility, unwrap class method if needed
+    func = getattr(func, 'im_func', func)
+
     def mutating_func(self, *args, **kw):
         res = func(self, *args, **kw)
         self.data.save()
