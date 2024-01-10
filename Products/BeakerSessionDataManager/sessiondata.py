@@ -153,7 +153,7 @@ def session_mutator(func):
 
 
 @implementer(ISessionDataObject)
-class BeakerSessionDataObject(Implicit):
+class BeakerSessionDataObject(UserDict, Implicit):
     """Adapts a beaker session object to the interface expected of Zope sessions."""
 
     security = ClassSecurityInfo()
