@@ -219,10 +219,10 @@ class BeakerSessionDataObject(UserDict, Implicit):
     # dict API compatibility used by some plone addons e.g. collective.z3cform.wizard
 
     def has_key(self, key):
-        return key in self.session.keys()
+        return key in self.session
 
-    def get(self, key):
-        return self.session.get(key)
+    def get(self, key, default=None):
+        return self.session.get(key, default)
 
     def __getitem__(self, key):
         return self.get(key)
