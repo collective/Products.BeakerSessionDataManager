@@ -7,6 +7,8 @@ Changelog
 - Add compatibility with Products.Sessions 4.11 and better.
   [pgrunewald]
 
+- Ensure Python 2.7 compatibility
+  [alecpm]
 
 2.1 (2021-05-12)
 ----------------
