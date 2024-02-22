@@ -2,8 +2,8 @@
 
 from AccessControl.SecurityInfo import ClassSecurityInfo
 from AccessControl.Permissions import access_contents_information
+from AccessControl.class_init import InitializeClass
 from Acquisition import Implicit
-from App.class_init import InitializeClass
 from OFS.PropertyManager import PropertyManager
 from OFS.SimpleItem import SimpleItem
 from Products.BeakerSessionDataManager.interfaces import ISessionDataObject
