@@ -2,8 +2,8 @@
 
 from AccessControl.SecurityInfo import ClassSecurityInfo
 from AccessControl.Permissions import access_contents_information
+from AccessControl.class_init import InitializeClass
 from Acquisition import Implicit
-from App.class_init import InitializeClass
 from OFS.PropertyManager import PropertyManager
 from OFS.SimpleItem import SimpleItem
 from Products.BeakerSessionDataManager.interfaces import ISessionDataObject
@@ -144,6 +144,9 @@ addBeakerSessionDataManagerForm = PageTemplateFile("www/add_sdm.pt", globals())
 def session_mutator(func):
     """Decorator to make a UserDict mutator save the session."""
 
+    # Python 2.7 compatibility, unwrap class method if needed
+    func = getattr(func, 'im_func', func)
+
     def mutating_func(self, *args, **kw):
         res = func(self, *args, **kw)
         self.data.save()
@@ -219,13 +222,16 @@ class BeakerSessionDataObject(Implicit):
     # dict API compatibility used by some plone addons e.g. collective.z3cform.wizard
 
     def has_key(self, key):
-        return key in self.session.keys()
+        return key in self.session
 
-    def get(self, key):
-        return self.session.get(key)
+    def get(self, key, default=None):
+        return self.session.get(key, default)
 
     def __getitem__(self, key):
         return self.get(key)
+
+    def __contains__(self, key):
+        return key in self.session
 
 
 InitializeClass(BeakerSessionDataObject)
